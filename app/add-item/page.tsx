@@ -34,8 +34,8 @@ export default function AddItemPage() {
   // Show loading while checking auth
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -43,8 +43,8 @@ export default function AddItemPage() {
   // Show loading while redirecting
   if (!isSignedIn) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -134,9 +134,9 @@ export default function AddItemPage() {
       }
 
       const result = await response.json()
-      
+
       toast.success("Item listed successfully!")
-      
+
       // Reset form
       setFormData({
         title: "",
@@ -149,7 +149,7 @@ export default function AddItemPage() {
         points: 50,
       })
       setImages([])
-      
+
       // Redirect to the item page or dashboard
       router.push("/dashboard")
     } catch (error) {
@@ -161,67 +161,153 @@ export default function AddItemPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">List a New Item</h1>
-          <p className="text-gray-600">Share your pre-loved fashion with the ReWear community</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Image Upload */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Photos</h2>
-            <p className="text-gray-600 mb-4">
-              Add up to 5 photos of your item. The first photo will be the main image.
+    <div className="min-h-screen bg-black">
+      {/* Header Section */}
+      <div className="bg-gray-900 border-b border-gray-800">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+              List a New Item
+            </h1>
+            <p className="text-gray-300 text-lg">
+              Share your pre-loved fashion with the community
             </p>
+          </div>
+        </div>
+      </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {/* Upload Button */}
-              {images.length < 5 && (
-                <label className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
-                  <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" />
-                  <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Upload Photos</p>
-                </label>
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Progress Indicator */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                  1
+                </div>
+                <span className="text-white font-medium">Add Photos</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-gray-700 text-gray-300 rounded-full flex items-center justify-center text-sm font-medium">
+                  2
+                </div>
+                <span className="text-gray-400 font-medium">Item Details</span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 bg-gray-700 text-gray-300 rounded-full flex items-center justify-center text-sm font-medium">
+                  3
+                </div>
+                <span className="text-gray-400 font-medium">Review & Publish</span>
+              </div>
+            </div>            {/* Photo Upload Section */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">Photos</h2>
+                <span className="text-sm text-gray-300 bg-gray-800 px-3 py-1 rounded-full">
+                  {images.length}/5 photos
+                </span>
+              </div>
+
+              <p className="text-gray-300">
+                Upload high-quality photos of your item. The first photo will be the main image displayed to shoppers.
+              </p>
+
+              {/* Empty State - No Photos */}
+              {images.length === 0 && (
+                <div className="border-2 border-dashed border-gray-700 rounded-xl p-12 text-center bg-gray-800/50">
+                  <div className="max-w-sm mx-auto">
+                    <Upload className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-white mb-2">Upload your first photo</h3>
+                    <p className="text-gray-300 mb-6 text-sm">
+                      Drag and drop your images here, or click to browse. JPG, PNG files up to 5MB each.
+                    </p>
+                    <label className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200 shadow-md hover:shadow-lg inline-flex items-center cursor-pointer">
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose Files
+                    </label>
+                  </div>
+                </div>
               )}
 
-              {/* Image Previews */}
-              {images.map((image, index) => (
-                <div key={index} className="relative group">
-                  <Image
-                    src={image || "/placeholder.svg"}
-                    alt={`Preview ${index + 1}`}
-                    width={400}
-                    height={128}
-                    className="w-full h-32 object-cover rounded-xl"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                  {index === 0 && (
-                    <div className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
-                      Main
-                    </div>
-                  )}
+              {/* Photo Grid - With Photos */}
+              {images.length > 0 && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {/* Existing Images */}
+                    {images.map((image, index) => (
+                      <div key={index} className="relative aspect-square group">
+                        <Image
+                          src={image || "/placeholder.svg"}
+                          alt={`Preview ${index + 1}`}
+                          width={200}
+                          height={200}
+                          className="w-full h-full object-cover rounded-xl border border-gray-700 shadow-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:scale-110"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                        {index === 0 && (
+                          <div className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-md font-medium shadow-sm">
+                            Main Photo
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {/* Add More Button */}
+                    {images.length < 5 && (
+                      <label className="aspect-square border-2 border-dashed border-gray-700 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-gray-800/50 transition-all duration-200 group">
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <Upload className="h-6 w-6 text-gray-400 group-hover:text-blue-400 transition-colors mb-2" />
+                        <span className="text-xs text-gray-400 group-hover:text-blue-400 font-medium text-center px-2">
+                          Add Photo
+                        </span>
+                      </label>
+                    )}
+                  </div>
+
+                  {/* Photo Tips */}
+                  <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-white mb-2">Photo Tips:</h4>
+                    <ul className="text-xs text-gray-300 space-y-1">
+                      <li>• Use natural lighting for best results</li>
+                      <li>• Show the item from multiple angles</li>
+                      <li>• Include close-ups of any details or flaws</li>
+                      <li>• First photo should be the main view</li>
+                    </ul>
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
-          {/* Item Details */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Item Details</h2>
+          {/* Item Details Section */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-white mb-6">Item Details</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6">
               {/* Title */}
-              <div className="md:col-span-2">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                  Title *
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-white mb-2">
+                  Item Title *
                 </label>
                 <input
                   type="text"
@@ -230,56 +316,103 @@ export default function AddItemPage() {
                   value={formData.title}
                   onChange={handleInputChange}
                   required
-                  placeholder="e.g., Vintage Leather Jacket"
-                  className="input-field"
+                  placeholder="e.g., Vintage Leather Jacket - Size M"
+                  className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  Be specific and descriptive to attract more interest
+                </p>
               </div>
 
-              {/* Category */}
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-                  Category *
-                </label>
-                <select
-                  id="category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                >
-                  {categories.map((category) => (
-                    <option key={category.value} value={category.value}>
-                      {category.label}
-                    </option>
-                  ))}
-                </select>
+              {/* Category and Type Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium text-white mb-2">
+                    Category *
+                  </label>
+                  <select
+                    id="category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  >
+                    {categories.map((category) => (
+                      <option key={category.value} value={category.value}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="type" className="block text-sm font-medium text-white mb-2">
+                    Listing Type *
+                  </label>
+                  <select
+                    id="type"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  >
+                    <option value="swap">Swap</option>
+                    <option value="donate">Donate</option>
+                    <option value="points">Points</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Type */}
-              <div>
-                <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
-                  Listing Type *
-                </label>
-                <select
-                  id="type"
-                  name="type"
-                  value={formData.type}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                >
-                  <option value="swap">Swap</option>
-                  <option value="donate">Donate</option>
-                  <option value="points">Points</option>
-                </select>
+              {/* Size and Condition Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="size" className="block text-sm font-medium text-white mb-2">
+                    Size *
+                  </label>
+                  <select
+                    id="size"
+                    name="size"
+                    value={formData.size}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  >
+                    {sizes.map((size) => (
+                      <option key={size.value} value={size.value}>
+                        {size.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="condition" className="block text-sm font-medium text-white mb-2">
+                    Condition *
+                  </label>
+                  <select
+                    id="condition"
+                    name="condition"
+                    value={formData.condition}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  >
+                    {conditions.map((condition) => (
+                      <option key={condition.value} value={condition.value}>
+                        {condition.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Points (only for points listing type) */}
               {formData.type === "points" && (
                 <div>
-                  <label htmlFor="points" className="block text-sm font-medium text-gray-700 mb-2">
-                    Points *
+                  <label htmlFor="points" className="block text-sm font-medium text-white mb-2">
+                    Points Required *
                   </label>
                   <input
                     type="number"
@@ -290,74 +423,17 @@ export default function AddItemPage() {
                     max={999}
                     onChange={handleInputChange}
                     required
-                    className="input-field"
+                    className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
-                  <p className="text-sm text-gray-500 mt-1">Set the number of points required to claim this item.</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Set the number of points required to claim this item (1-999)
+                  </p>
                 </div>
               )}
 
-              {/* Size */}
-              <div>
-                <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-2">
-                  Size *
-                </label>
-                <select
-                  id="size"
-                  name="size"
-                  value={formData.size}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                >
-                  {sizes.map((size) => (
-                    <option key={size.value} value={size.value}>
-                      {size.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Condition */}
-              <div>
-                <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-2">
-                  Condition *
-                </label>
-                <select
-                  id="condition"
-                  name="condition"
-                  value={formData.condition}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                >
-                  {conditions.map((condition) => (
-                    <option key={condition.value} value={condition.value}>
-                      {condition.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Tags */}
-              <div className="md:col-span-2">
-                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
-                  Tags
-                </label>
-                <input
-                  type="text"
-                  id="tags"
-                  name="tags"
-                  value={formData.tags}
-                  onChange={handleInputChange}
-                  placeholder="e.g., vintage, designer, casual (comma separated)"
-                  className="input-field"
-                />
-                <p className="text-sm text-gray-500 mt-1">Separate tags with commas</p>
-              </div>
-
               {/* Description */}
-              <div className="md:col-span-2">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-white mb-2">
                   Description *
                 </label>
                 <textarea
@@ -367,29 +443,78 @@ export default function AddItemPage() {
                   onChange={handleInputChange}
                   required
                   rows={4}
-                  placeholder="Describe your item's condition, fit, style, and any other relevant details..."
-                  className="input-field resize-none"
+                  placeholder="Describe your item's condition, fit, style, brand, and any other relevant details..."
+                  className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  Include details about fit, materials, brand, and any flaws
+                </p>
+              </div>
+
+              {/* Tags */}
+              <div>
+                <label htmlFor="tags" className="block text-sm font-medium text-white mb-2">
+                  Tags
+                </label>
+                <input
+                  type="text"
+                  id="tags"
+                  name="tags"
+                  value={formData.tags}
+                  onChange={handleInputChange}
+                  placeholder="e.g., vintage, designer, casual, summer"
+                  className="w-full px-4 py-3 border border-gray-700 bg-gray-800 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Separate tags with commas to help others find your item
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={
-                !formData.title ||
-                !formData.category ||
-                !formData.size ||
-                !formData.condition ||
-                !formData.description ||
-                images.length === 0
-              }
-            >
-              List Item
-            </button>
+          {/* Submit Section */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl shadow-lg p-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg font-semibold text-white mb-1">Ready to list your item?</h3>
+                <p className="text-gray-300 text-sm">
+                  Your item will be visible to the community once published
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => router.back()}
+                  className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-xl border border-gray-600 transition-colors duration-200 shadow-md hover:shadow-lg"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  disabled={
+                    isSubmitting ||
+                    !formData.title ||
+                    !formData.category ||
+                    !formData.size ||
+                    !formData.condition ||
+                    !formData.description ||
+                    images.length === 0
+                  }
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Publishing...
+                    </>
+                  ) : (
+                    "Publish Item"
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       </div>

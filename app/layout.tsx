@@ -15,7 +15,12 @@ export const metadata: Metadata = {
   title: "ReWear - Sustainable Clothing Swap Platform",
   description: "Join the sustainable fashion movement. Swap, donate, and discover pre-loved clothing.",
   viewport: "width=device-width, initial-scale=1",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 }
 
 export default function RootLayout({

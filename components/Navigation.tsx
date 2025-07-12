@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useUser, UserButton } from "@clerk/nextjs"
 import { useState } from "react"
-import { Menu, X, Shirt } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 
 export default function Navigation() {
@@ -16,9 +17,13 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="bg-blue-500 dark:bg-blue-600 p-1.5 sm:p-2 rounded-lg">
-              <Shirt className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
-            </div>
+            <Image
+              src="/logo.png"
+              alt="ReWear Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 sm:h-10 sm:w-10"
+            />
             <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">ReWear</span>
           </Link>
 

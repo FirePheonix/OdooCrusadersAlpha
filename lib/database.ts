@@ -42,6 +42,7 @@ export async function getItems(filters?: {
   search?: string
   status?: string
   userId?: string
+  includeSwapped?: boolean
 }) {
   try {
     let query = supabase
@@ -73,7 +74,13 @@ export async function getItems(filters?: {
     if (filters?.status) {
       query = query.eq("status", filters.status)
     } else {
-      query = query.neq("status", "deleted")
+      // By default, exclude deleted and swapped items from browse/search
+      // unless explicitly requested (for dashboard)
+      if (filters?.includeSwapped) {
+        query = query.neq("status", "deleted")
+      } else {
+        query = query.neq("status", "deleted").neq("status", "swapped")
+      }
     }
 
     if (filters?.userId) {

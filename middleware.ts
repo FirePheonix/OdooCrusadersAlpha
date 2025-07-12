@@ -11,6 +11,7 @@ export const config = {
     "/search(.*)",
     "/avatar(.*)",
     "/api/items(.*)",
+    "/api/swaps(.*)",
     "/api/webhooks/(.*)",
   ],
 }

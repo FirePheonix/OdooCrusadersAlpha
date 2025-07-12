@@ -20,7 +20,8 @@ export default function BrowsePage() {
     const loadItems = async () => {
       try {
         setLoading(true)
-        const fetchedItems = await getItems()
+        // Explicitly filter for available items only
+        const fetchedItems = await getItems({ status: "available" })
         setItems(fetchedItems || [])
       } catch (error) {
         console.error("Error loading items:", error)

@@ -7,6 +7,7 @@ import Navigation from "@/components/Navigation"
 import Footer from "@/components/Footer"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { SupabaseStatus } from "@/components/SupabaseStatus"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -43,6 +44,7 @@ export default function RootLayout({
             <main className="min-h-screen">{children}</main>
             <Footer />
             <SupabaseStatus />
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

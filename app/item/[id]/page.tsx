@@ -3,16 +3,22 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Heart, Share2, Star, MapPin, Calendar, Package, Shield } from "lucide-react"
+import { ArrowLeft, Heart, Share2, Star, MapPin, Calendar, Package, Shield, RefreshCw } from "lucide-react"
 import { getItemById, getItems } from "@/lib/database"
+import { useUser } from "@clerk/nextjs"
+import SwapRequestModal from "@/components/SwapRequestModal"
+import { toast } from "sonner"
 import type { Item } from "@/lib/supabase"
 
 export default function ItemDetailPage({ params }: { params: { id: string } }) {
+  const { isSignedIn, user } = useUser()
   const [selectedImage, setSelectedImage] = useState(0)
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [item, setItem] = useState<Item | null>(null)
   const [relatedItems, setRelatedItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
+  const [showSwapModal, setShowSwapModal] = useState(false)
+  const [swapLoading, setSwapLoading] = useState(false)
 
   useEffect(() => {
     const loadItemData = async () => {
@@ -42,6 +48,37 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
 
     loadItemData()
   }, [params.id])
+
+  const handleSwapRequest = async (offeredItemId: string, message: string) => {
+    try {
+      setSwapLoading(true)
+      
+      const response = await fetch("/api/swaps", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          itemId: params.id,
+          offeredItemId,
+          message,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to create swap request")
+      }
+
+      toast.success("Swap request sent successfully!")
+      setShowSwapModal(false)
+    } catch (error) {
+      console.error("Error creating swap request:", error)
+      toast.error(error instanceof Error ? error.message : "Failed to send swap request")
+    } finally {
+      setSwapLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -227,7 +264,19 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              <button className="w-full btn-primary">Request Swap</button>
+              {isSignedIn && item.user?.id !== user?.id && item.status === "available" ? (
+                <button 
+                  onClick={() => setShowSwapModal(true)}
+                  className="w-full btn-primary flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="h-5 w-5" />
+                  Request Swap
+                </button>
+              ) : (
+                <button className="w-full btn-primary" disabled>
+                  {item.status === "available" ? "Sign in to Swap" : "Item Not Available"}
+                </button>
+              )}
               <button className="w-full btn-secondary">Message Owner</button>
             </div>
           </div>
@@ -264,6 +313,15 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
           </div>
         )}
       </div>
+
+      {/* Swap Request Modal */}
+      <SwapRequestModal
+        isOpen={showSwapModal}
+        onClose={() => setShowSwapModal(false)}
+        targetItem={item}
+        onSubmit={handleSwapRequest}
+        loading={swapLoading}
+      />
     </div>
   )
 }

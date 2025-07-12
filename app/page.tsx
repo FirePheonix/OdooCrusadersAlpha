@@ -17,8 +17,8 @@ export default function HomePage() {
       try {
         setLoading(true)
         
-        // Fetch featured items (items with high likes/views)
-        const allItems = await getItems()
+        // Fetch featured items (items with high likes/views) - only available items
+        const allItems = await getItems({ status: "available" })
         if (allItems) {
           // Sort by likes and views to get featured items
           const featured = allItems

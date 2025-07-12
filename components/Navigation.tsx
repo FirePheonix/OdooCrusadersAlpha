@@ -75,7 +75,7 @@ export default function Navigation() {
                     Admin
                   </Link>
                 )}
-                <ThemeToggle />
+                
                 <div className="scale-75 sm:scale-100">
                   <UserButton afterSignOutUrl="/" />
                 </div>

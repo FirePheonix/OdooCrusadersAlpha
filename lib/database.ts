@@ -14,7 +14,14 @@ export async function createUser(userData: Partial<User>) {
 
 export async function getUserByClerkId(clerkId: string) {
   try {
-    const { data, error } = await supabase.from("users").select("*").eq("clerk_id", clerkId).single()
+    const { data, error } = await supabase
+      .from("users")
+      .select(`
+        *,
+        avatar:user_avatars(*)
+      `)
+      .eq("clerk_id", clerkId)
+      .single()
     if (error && error.code !== "PGRST116") throw error
     return data
   } catch (error) {
@@ -356,6 +363,44 @@ export async function getAdminStats() {
     }
   } catch (error) {
     console.error("Error getting admin stats:", error)
+    throw error
+  }
+}
+
+// Avatar operations
+export async function getUserAvatar(userId: string) {
+  try {
+    const { data, error } = await supabase
+      .from("user_avatars")
+      .select("*")
+      .eq("user_id", userId)
+      .single()
+
+    if (error && error.code !== "PGRST116") throw error
+    return data
+  } catch (error) {
+    console.error("Error getting user avatar:", error)
+    throw error
+  }
+}
+
+export async function saveUserAvatar(userId: string, avatarData: string, clothingItems: string[] = []) {
+  try {
+    const { data, error } = await supabase
+      .from("user_avatars")
+      .upsert({
+        user_id: userId,
+        avatar_data: avatarData,
+        clothing_items: clothingItems,
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error("Error saving user avatar:", error)
     throw error
   }
 }
